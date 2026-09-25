@@ -1,7 +1,8 @@
 package tn.esprit.autoloc.domain;
+
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "vehicule")
