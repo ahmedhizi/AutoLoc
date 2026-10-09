@@ -4,6 +4,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import tn.esprit.autoloc.domain.Agence;
@@ -113,6 +117,47 @@ public class AgenceTests {
     @Test
     public void fullLoadAgence() {
         loadAgence(fullAgenceRepository, "Full Repository");
+    }
+
+
+    @Test
+    public void loadSortedAgences() {
+        Iterable<Agence> agences =
+                fullAgenceRepository.findAll(
+                        Sort.by(Sort.Direction.DESC, "idAgence")
+                );
+
+        for (Agence agence : agences) {
+            System.out.println("ID : " + agence.getIdAgence());
+            System.out.println("Nom : " + agence.getNom());
+            System.out.println("Adresse : " + agence.getAdresse());
+            System.out.println("Ville : " + agence.getVille());
+            System.out.println("Téléphone : " + agence.getTelephone());
+            System.out.println("-------------------------");
+        }
+    }
+
+    @Test
+    public void loadPagedAgences() {
+        Pageable pageable = PageRequest.of(
+                0,
+                2,
+                Sort.by(Sort.Direction.DESC, "idAgence")
+        );
+
+        Page<Agence> page = fullAgenceRepository.findAll(pageable);
+
+        System.out.println("Nombre total de pages : " + page.getTotalPages());
+        System.out.println("Page en cours : " + (page.getNumber() + 1));
+
+        for (Agence agence : page.getContent()) {
+            System.out.println("ID : " + agence.getIdAgence());
+            System.out.println("Nom : " + agence.getNom());
+            System.out.println("Adresse : " + agence.getAdresse());
+            System.out.println("Ville : " + agence.getVille());
+            System.out.println("Téléphone : " + agence.getTelephone());
+            System.out.println("-------------------------");
+        }
     }
 }
 
