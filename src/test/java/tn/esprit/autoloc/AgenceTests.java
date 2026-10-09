@@ -26,8 +26,11 @@ public class AgenceTests {
     @Autowired
     private IAgenceRepository fullAgenceRepository;
 
-    @Test
-    public void addAgence(){
+
+    private void addAgence(CrudRepository<Agence , Long> repository){
+
+        int valeur = (int) System.currentTimeMillis();
+
         Agence a = new Agence();
         a.setNom("Agence ariana");
         a.setAdresse("1 Rue Hedi");
@@ -36,7 +39,7 @@ public class AgenceTests {
 
         Vehicule v1 = new Vehicule();
         v1.setCategorie(CategorieVehicule.SUV);
-        v1.setImmatriculation("785414TU96");
+        v1.setImmatriculation("785414TU96" + valeur);
         v1.setMarque("Isuzu");
         v1.setModele("DMax");
         v1.setStatut(StatutVehicule.EN_MAINTENANCE);
@@ -44,29 +47,38 @@ public class AgenceTests {
 
         Vehicule v2 = new Vehicule();
         v2.setCategorie(CategorieVehicule.UTILITAIRE);
-        v2.setImmatriculation("785414TU95");
+        v2.setImmatriculation("785414TU95" + valeur);
         v2.setMarque("Toyota");
         v2.setModele("Yaris");
         v2.setStatut(StatutVehicule.DISPONIBLE);
         v2.setTarifJournalier(new BigDecimal(80));
 
         a.setVehicules(Set.of(v1,v2));
-        basicAgenceRepository.save(a);
+        repository.save(a);
     }
 
-    @Test
-    public void loadAgence(){
-        Iterable<Agence> agences = basicAgenceRepository.findAll();
+    private void loadAgence(CrudRepository repository, String typeDepot) {
+        Iterable<Agence> agences = repository.findAll();
 
         StringBuilder sb = new StringBuilder();
-        for (Agence agence : agences) {
+        sb.append("Type de dépôt utilisé : ")
+                .append(typeDepot)
+                .append("\n");
+
+        for (Object obj : agences) {
+            Agence agence = (Agence) obj;
+
             sb.append(agence.getIdAgence())
                     .append(" | ")
                     .append(agence.getNom())
                     .append("\n");
+
             Set<Vehicule> vehicules = agence.getVehicules();
             int nb = (vehicules == null) ? 0 : vehicules.size();
-            sb.append("Nombre de véhicules : ").append(nb).append("\n");
+
+            sb.append("Nombre de véhicules : ")
+                    .append(nb)
+                    .append("\n");
 
             if (vehicules != null) {
                 for (Vehicule v : vehicules) {
@@ -77,9 +89,30 @@ public class AgenceTests {
                             .append("\n");
                 }
             }
-
         }
-        fail(sb.toString());
+
+        System.out.println(sb);
+    }
+
+    @Test
+    public void basicAddAgence() {
+        addAgence(basicAgenceRepository);
+    }
+
+    @Test
+    public void fullAddAgence() {
+        addAgence(fullAgenceRepository);
+    }
+
+
+    @Test
+    public void basicLoadAgence() {
+        loadAgence(basicAgenceRepository, "Basic Repository Mock");
+    }
+
+    @Test
+    public void fullLoadAgence() {
+        loadAgence(fullAgenceRepository, "Full Repository");
     }
 }
 
