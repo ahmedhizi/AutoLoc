@@ -147,7 +147,9 @@ public class AgenceTests {
 
         Page<Agence> page = fullAgenceRepository.findAll(pageable);
 
-        System.out.println("Nombre total de pages : " + page.getTotalPages());
+
+
+        System.out.println("Nombre total de page : " + page.getTotalPages());
         System.out.println("Page en cours : " + (page.getNumber() + 1));
 
         for (Agence agence : page.getContent()) {
