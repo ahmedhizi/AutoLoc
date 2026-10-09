@@ -10,6 +10,7 @@ import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.domain.CategorieVehicule;
 import tn.esprit.autoloc.domain.StatutVehicule;
 import tn.esprit.autoloc.domain.Vehicule;
+import tn.esprit.autoloc.repository.IAgenceRepository;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -20,7 +21,10 @@ import static org.assertj.core.api.Fail.fail;
 @SpringBootTest
 public class AgenceTests {
     @Autowired
-    private AgenceRepositoryMock agenceRepository;
+    private AgenceRepositoryMock basicAgenceRepository;
+
+    @Autowired
+    private IAgenceRepository fullAgenceRepository;
 
     @Test
     public void addAgence(){
@@ -47,12 +51,12 @@ public class AgenceTests {
         v2.setTarifJournalier(new BigDecimal(80));
 
         a.setVehicules(Set.of(v1,v2));
-        agenceRepository.save(a);
+        basicAgenceRepository.save(a);
     }
 
     @Test
     public void loadAgence(){
-        Iterable<Agence> agences = agenceRepository.findAll();
+        Iterable<Agence> agences = basicAgenceRepository.findAll();
 
         StringBuilder sb = new StringBuilder();
         for (Agence agence : agences) {
