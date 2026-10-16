@@ -139,26 +139,41 @@ public class AgenceTests {
 
     @Test
     public void loadPagedAgences() {
+
+        int taillePage = 2;
+
         Pageable pageable = PageRequest.of(
                 0,
-                2,
+                taillePage,
                 Sort.by(Sort.Direction.DESC, "idAgence")
         );
 
         Page<Agence> page = fullAgenceRepository.findAll(pageable);
 
+        int totalPages = page.getTotalPages();
 
+        System.out.println("Nombre total de pages : " + totalPages);
 
-        System.out.println("Nombre total de page : " + page.getTotalPages());
-        System.out.println("Page en cours : " + (page.getNumber() + 1));
+        for (int i = 0; i < totalPages; i++) {
 
-        for (Agence agence : page.getContent()) {
-            System.out.println("ID : " + agence.getIdAgence());
-            System.out.println("Nom : " + agence.getNom());
-            System.out.println("Adresse : " + agence.getAdresse());
-            System.out.println("Ville : " + agence.getVille());
-            System.out.println("Téléphone : " + agence.getTelephone());
-            System.out.println("-------------------------");
+            pageable = PageRequest.of(
+                    i,
+                    taillePage,
+                    Sort.by(Sort.Direction.DESC, "idAgence")
+            );
+
+            page = fullAgenceRepository.findAll(pageable);
+
+            System.out.println("\n========== Page " + (i + 1) + " ==========");
+
+            for (Agence agence : page.getContent()) {
+                System.out.println("ID : " + agence.getIdAgence());
+                System.out.println("Nom : " + agence.getNom());
+                System.out.println("Adresse : " + agence.getAdresse());
+                System.out.println("Ville : " + agence.getVille());
+                System.out.println("Téléphone : " + agence.getTelephone());
+                System.out.println("-------------------------");
+            }
         }
     }
 }
