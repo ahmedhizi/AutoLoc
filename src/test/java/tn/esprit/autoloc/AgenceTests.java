@@ -9,17 +9,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.domain.CategorieVehicule;
 import tn.esprit.autoloc.domain.StatutVehicule;
 import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.repository.IAgenceRepository;
+import tn.esprit.autoloc.service.IAgenceService;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
 import static org.assertj.core.api.Fail.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -29,6 +33,9 @@ public class AgenceTests {
 
     @Autowired
     private IAgenceRepository fullAgenceRepository;
+
+    @Autowired
+    private IAgenceService agenceService;
 
 
     private void addAgence(CrudRepository<Agence , Long> repository){
@@ -176,8 +183,29 @@ public class AgenceTests {
             }
         }
     }
+
+    @Test
+    public void createAgence() {
+
+        Agence a = new Agence();
+        a.setNom("Agence Lac");
+        a.setAdresse("5 Rue du Lac");
+        a.setVille("Tunis");
+        a.setTelephone("71123456");
+
+
+        Agence creee = agenceService.create(a);
+
+        // 3. Vérifie le résultat
+        assertNotNull("L'identifiant doit être généré", creee.getIdAgence());
+        assertEquals("Agence Lac", creee.getNom());
+        assertEquals("71123456", creee.getTelephone());
+
+        System.out.println("Agence créée avec l'ID : " + creee.getIdAgence());
+    }
 }
 
+@Repository
 interface AgenceRepositoryMock extends CrudRepository<Agence, Long>{
 
 }

@@ -20,12 +20,12 @@ public class BasicAgenceServiceImpl implements IAgenceService {
     }
 
     @Override
-    public Agence create(Agence agence) throws IllegalAccessException {
+    public Agence create(Agence agence) {
         if(agence.getIdAgence() != null){
-            throw new IllegalAccessException("identifient de l'agence doit etre null !!!");
+            throw new IllegalArgumentException("identifient de l'agence doit etre null !!!");
         }
         if(!check(agence,true)){
-            throw new IllegalAccessException("champs obligatoires !!!");
+            throw new IllegalArgumentException("champs obligatoires !!!");
         }
         return Repository.save(agence);
     }
@@ -36,22 +36,37 @@ public class BasicAgenceServiceImpl implements IAgenceService {
     }
 
     public List<Agence> findAll() {
-        return null; // à implémenter
+        return Repository.findAll();
     }
 
     @Override
     public Agence update(Long id, Agence agence) {
-        return null;
+        Agence existante = findById(id);
+
+        if (!check(agence, false)) {
+            throw new IllegalArgumentException("champs obligatoires !!!");
+        }
+
+        existante.setNom(agence.getNom());
+        existante.setTelephone(agence.getTelephone());
+        existante.setAdresse(agence.getAdresse());
+        existante.setVille(agence.getVille());
+
+        return Repository.save(existante);
     }
 
     @Override
     public void deleteById(Long id) {
-
+        if (!Repository.existsById(id)) {
+            throw new ResourceNotFoundException("Agence", id.toString());
+        }
+        Repository.deleteById(id);
     }
 
     @Override
     public boolean hasVehicules(Long id) {
-        return false;
+        Agence agence = findById(id);
+        return agence.getVehicules() != null && !agence.getVehicules().isEmpty();
     }
 
 }
