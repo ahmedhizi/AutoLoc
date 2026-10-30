@@ -4,14 +4,19 @@ import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.Utils;
+import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Agence;
+import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.repository.IAgenceRepository;
 
 @Service
 @Primary
 public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implements IAgenceService{
-    public AgenceServiceImpl(IAgenceRepository repository) {
+    private final IVehiculeService vehiculeService;
+
+    public AgenceServiceImpl(IAgenceRepository repository, IVehiculeService vehiculeService) {
         super(repository);
+        this.vehiculeService = vehiculeService;
     }
 
     @Override
@@ -44,4 +49,19 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
         Agence agence = findById(id);
         return agence.getVehicules() != null && !agence.getVehicules().isEmpty();
     }
+
+    @Override
+    public String simuler(Long id, int jours, VehiculeOffre offre) {
+        Agence a = findById(id);
+        double total = 0;
+        if (a.getVehicules() != null) {
+            for (Vehicule v : a.getVehicules())
+                total += vehiculeService.calculTarif(v, jours, offre);
+        }
+        return "Agence #" + a.getIdAgence() + " - " + a.getNom() + " - Tel : " + a.getTelephone()
+                + "\nOffre : " + offre + " / " + jours + " jour(s)"
+                + "\nTotal des tarifs : " + String.format("%.2f", total);
+    }
+
+
 }

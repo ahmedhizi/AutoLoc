@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.service.IAgenceService;
 
@@ -66,5 +67,12 @@ public class AgenceController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@Parameter(description = "Identifiant de l'agence") @PathVariable Long id) {
         agenceService.deleteById(id);
+    }
+
+    @GetMapping("/{id}/simuler")
+    public String simuler(@PathVariable Long id,
+                          @RequestParam int jours,
+                          @RequestParam VehiculeOffre offre) {
+        return agenceService.simuler(id, jours, offre);
     }
 }
