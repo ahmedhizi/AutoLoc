@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,5 +37,6 @@ public class Agence {
 
 
     @OneToMany(mappedBy = "agence", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Employe> employes;
 }
