@@ -68,5 +68,4 @@ public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID
         repository.deleteById(id);
     }
 
-
 }

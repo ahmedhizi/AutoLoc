@@ -10,7 +10,7 @@ import tn.esprit.autoloc.repository.IAgenceRepository;
 
 @Service
 @Primary
-public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implements IAgenceService{
+public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implements IAgenceService , IAgenceSimulation{
     private final IVehiculeService vehiculeService;
 
     public AgenceServiceImpl(IAgenceRepository repository, IVehiculeService vehiculeService) {
@@ -66,7 +66,4 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
         stringBuilder.append("Total : " + total + "\n");
         return stringBuilder.toString();
     }
-
-
-
 }

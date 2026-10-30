@@ -70,9 +70,6 @@ public class BasicAgenceServiceImpl implements IAgenceService {
         return agence.getVehicules() != null && !agence.getVehicules().isEmpty();
     }
 
-    @Override
-    public String simuler(Agence agence, int jours, VehiculeOffre offre) {
-        throw new UnsupportedOperationException("Simulation non supportée");
-    }
+
 
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IAgenceService extends IGenericService<Agence, Long> {
     boolean hasVehicules(Long id);
-    String simuler(Agence agence, int jours, VehiculeOffre offre);
+
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.service.IAgenceService;
+import tn.esprit.autoloc.service.IAgenceSimulation;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class AgenceController {
 
     private final IAgenceService agenceService;
+    private final IAgenceSimulation simulation;
 
     @Operation(summary = "Lister les agences")
     @ApiResponse(responseCode = "200", description = "Liste des agences")
@@ -73,6 +75,6 @@ public class AgenceController {
     public String simuler(@PathVariable Agence agence,
                           @RequestParam int jours,
                           @RequestParam VehiculeOffre offre) {
-        return agenceService.simuler(agence, jours, offre);
+        return simulation.simuler(agence, jours, offre);
     }
 }
