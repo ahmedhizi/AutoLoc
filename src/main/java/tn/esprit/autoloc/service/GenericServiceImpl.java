@@ -1,6 +1,8 @@
 package tn.esprit.autoloc.service;
 
 import org.springframework.data.repository.CrudRepository;
+import tn.esprit.autoloc.calcul.VehiculeOffre;
+import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.exception.ResourceNotFoundException;
 
 import java.util.ArrayList;
@@ -65,4 +67,6 @@ public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID
         }
         repository.deleteById(id);
     }
+
+
 }

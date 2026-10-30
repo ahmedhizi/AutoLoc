@@ -71,7 +71,7 @@ public class BasicAgenceServiceImpl implements IAgenceService {
     }
 
     @Override
-    public String simuler(Long id, int jours, VehiculeOffre offre) {
+    public String simuler(Agence agence, int jours, VehiculeOffre offre) {
         throw new UnsupportedOperationException("Simulation non supportée");
     }
 

@@ -69,10 +69,10 @@ public class AgenceController {
         agenceService.deleteById(id);
     }
 
-    @GetMapping("/{id}/simuler")
-    public String simuler(@PathVariable Long id,
+    @GetMapping("/{agence}/simuler")
+    public String simuler(@PathVariable Agence agence,
                           @RequestParam int jours,
                           @RequestParam VehiculeOffre offre) {
-        return agenceService.simuler(id, jours, offre);
+        return agenceService.simuler(agence, jours, offre);
     }
 }

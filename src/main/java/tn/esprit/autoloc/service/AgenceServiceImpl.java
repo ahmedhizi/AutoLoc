@@ -1,6 +1,5 @@
 package tn.esprit.autoloc.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.Utils;
@@ -51,17 +50,23 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
     }
 
     @Override
-    public String simuler(Long id, int jours, VehiculeOffre offre) {
-        Agence a = findById(id);
+    public String simuler(Agence agence, int nbJours, VehiculeOffre offre) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Id: " + agence.getIdAgence()
+                + ", Nom: " + agence.getNom()
+                + ", Tel: " + agence.getTelephone() + "\n");
+
         double total = 0;
-        if (a.getVehicules() != null) {
-            for (Vehicule v : a.getVehicules())
-                total += vehiculeService.calculTarif(v, jours, offre);
+        if (agence.getVehicules() != null) {
+            for (Vehicule vehicule : agence.getVehicules()) {
+                total += vehiculeService.calculTarif(vehicule, nbJours, offre);
+            }
         }
-        return "Agence #" + a.getIdAgence() + " - " + a.getNom() + " - Tel : " + a.getTelephone()
-                + "\nOffre : " + offre + " / " + jours + " jour(s)"
-                + "\nTotal des tarifs : " + String.format("%.2f", total);
+
+        stringBuilder.append("Total : " + total + "\n");
+        return stringBuilder.toString();
     }
+
 
 
 }

@@ -47,16 +47,24 @@ public class VehiculeServiceImpl extends GenericServiceImpl<Vehicule, Long> impl
 
 
     @Override
-    public double calculTarif(Vehicule v, int jours, VehiculeOffre offre) {
-        double tarif = v.getTarifJournalier().doubleValue();
-        switch (offre) {
-            case WEEKEND:
-                return tarif * 0.80 * jours;               // -20 % par jour
-            case LONGUE_DUREE:
-                double total = tarif * 0.75 * jours;       // -25 % par jour
-                return total > 2000 ? total * 0.95 : total; // -5 % si total > 2000
-            default:
-                return tarif * jours;                      // STANDARD
+    public double calculTarif(Vehicule vehicule, int nbJours, VehiculeOffre offre) {
+
+        double tarifJournalier = vehicule.getTarifJournalier().doubleValue();
+
+        if (offre == VehiculeOffre.WEEKEND) {
+            tarifJournalier *= 0.80;
+
+        } else if (offre == VehiculeOffre.LONGUE_DUREE) {
+            tarifJournalier *= 0.75;
         }
+
+        double total = tarifJournalier * nbJours;
+
+        if (offre == VehiculeOffre.LONGUE_DUREE && total > 2000) {
+            total *= 0.95;
+        }
+
+        return total;
     }
+
 }
